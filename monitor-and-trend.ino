@@ -32,6 +32,14 @@ float max_value = 1200;	 // Maximum value for the trend bar chart
 float refresh_rate = 30; // Display refresh rate in seconds, >= 2
 int elevation_asl = 415; // Elevation above sea-level in meters
 
+// Offset of temperature in degrees Celsius, i.e. how much 
+// is the sensor being heated by its environment, e.g. other 
+// electronic components?
+// This parameter cannot be < 0, cf. 
+// https://github.com/paulvha/scd30/blob/master/src/paulvha_SCD30.cpp
+float temperature_offset = 2.5;
+
+
 // Initialize array to store historical CO2 data
 #define array_len 100
 float ArrayData[array_len];
@@ -98,13 +106,15 @@ void setup() {
   // Explanation: For auto-calibration to work properly, SCD30
   // has to experience fresh air on a regular basis. Optimal
   // working conditions are given when the sensor is exposed to
-  // fresh air for one hour every day.
+  // fresh air for one hour every day. This is not realistic for
+  // most usage contexts of the device.
   // https://cdn.sparkfun.com/assets/d/c/0/7/2/SCD30_Interface_Description.pdf
   airSensorSCD30.setAutoSelfCalibration(false);
   Serial.println("Auto-calibration of SCD30 sensor deactivated.");
   airSensorSCD30.setAltitudeCompensation(elevation_asl);
-  airSensorSCD30.setTemperatureOffset(0); // offset in (hundreths of?) degrees Celsius
-                                          // cannot be <0 (https://github.com/paulvha/scd30/blob/master/src/paulvha_SCD30.cpp)
+  
+  // Set temperature offset (compensation)
+  airSensorSCD30.setTemperatureOffset(temperature_offset); 
 
   // Set measurement interval in seconds
   airSensorSCD30.setMeasurementInterval(5);
@@ -128,9 +138,6 @@ void loop() {
     yield();
   }
 
-  float offset = airSensorSCD30.getTemperatureOffset();
-  Serial.print("Current temp offset: " + String(offset));
-  
   // Read CO2 value from SCD30 and insert into the data array at 'most recent' position
   float co2 = airSensorSCD30.getCO2();
   ArrayData[15 - 1] = co2;
@@ -144,7 +151,7 @@ void loop() {
 
   // Write the current temperature to the LCD (2nd line, left-aligned)
   lcd.setCursor(0, 1);
-  lcd.printf("%.1f", airSensorSCD30.getTemperature());
+  lcd.printf("%.1f", airSensorSCD30.getTemperature() - 2.5);
   lcd.setCursor(5, 1);
   lcd.printf("deg");
 
