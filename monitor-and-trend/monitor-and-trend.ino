@@ -29,7 +29,7 @@
 
 float min_value = 500;   // Minimum value for the trend bar chart
 float max_value = 1200;	 // Maximum value for the trend bar chart
-float refresh_rate = 2; // Display refresh rate in seconds, >= 2
+float refresh_rate = 30; // Display refresh rate in seconds, >= 2
 int elevation_asl = 415; // Elevation above sea-level in meters
 
 // Offset of temperature in degrees Celsius, i.e. how much 
