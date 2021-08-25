@@ -1,5 +1,5 @@
 # co2-monitor
-C-code for running a CO2-, temperature- and relative humidity-monitoring device based on the Sensirion SCD30 sensor and the Adafruit Feather Huzzah Board. This code is inspired by works by various contributors, cf. preamble in the source.
+C-code for running a CO<sub>2</sub>-, temperature- and relative humidity-monitoring device based on the Sensirion SCD30 sensor and the Adafruit Feather Huzzah Board. This code is inspired by works by various contributors, cf. preamble in the source.
 
 # Building a CO<sub>2</sub> monitor
 I have published a tutorial on building a CO<sub>2</sub> monitor that covers both hardware and software (in German) and that uses the code in this repository:
